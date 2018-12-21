@@ -110,6 +110,10 @@ static bool no_bt_rfkill;
 module_param(no_bt_rfkill, bool, 0444);
 MODULE_PARM_DESC(no_bt_rfkill, "No rfkill for bluetooth.");
 
+static int override_has_hw_rfkill_switch = -1;
+module_param(override_has_hw_rfkill_switch, int, 0444);
+MODULE_PARM_DESC(override_has_hw_rfkill_switch, "Overrides the value of has_hw_rfkill_switch");
+
 /*
  * ACPI Helpers
  */
@@ -1116,6 +1120,9 @@ static int ideapad_acpi_add(struct platform_device *pdev)
 	priv->adev = adev;
 	priv->platform_device = pdev;
 	priv->has_hw_rfkill_switch = !dmi_check_system(no_hw_rfkill_list);
+
+	if (override_has_hw_rfkill_switch != -1)
+		priv->has_hw_rfkill_switch = override_has_hw_rfkill_switch;
 
 	ret = ideapad_sysfs_init(priv);
 	if (ret)
