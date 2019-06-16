@@ -1149,3 +1149,4 @@ module_platform_driver(ideapad_acpi_driver);
 MODULE_AUTHOR("David Woodhouse <dwmw2@infradead.org>");
 MODULE_DESCRIPTION("IdeaPad ACPI Extras");
 MODULE_LICENSE("GPL");
+MODULE_VERSION("JB1");
