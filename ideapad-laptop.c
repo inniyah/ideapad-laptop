@@ -38,6 +38,7 @@
 #include <linux/i8042.h>
 #include <linux/dmi.h>
 #include <linux/device.h>
+#include <linux/version.h>
 #include <acpi/video.h>
 
 #define IDEAPAD_RFKILL_DEV_NUM	(3)
@@ -1005,9 +1006,15 @@ static int ideapad_acpi_add(struct platform_device *pdev)
 	struct ideapad_private *priv;
 	struct acpi_device *adev;
 
+#if (LINUX_VERSION_CODE < KERNEL_VERSION(5, 18, 0))
 	ret = acpi_bus_get_device(ACPI_HANDLE(&pdev->dev), &adev);
 	if (ret)
 		return -ENODEV;
+#else
+	adev = acpi_fetch_acpi_dev(ACPI_HANDLE(&pdev->dev));
+	if (!adev)
+		return -ENODEV;
+#endif
 
 	if (read_method_int(adev->handle, "_CFG", &cfg))
 		return -ENODEV;
